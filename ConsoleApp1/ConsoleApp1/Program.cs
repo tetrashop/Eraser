@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,11 +13,23 @@ namespace ConsoleApp1
     class Program
     {
         static void Main(string[] args)
-        {///OpenApplication(@"k:\");
+        {
+            //OpenApplication(@"k:\");
+            FileIOPermission f2 = new FileIOPermission(FileIOPermissionAccess.Read, "k:\\");
+            f2.AddPathList(FileIOPermissionAccess.Write | FileIOPermissionAccess.Read, "k:\\out.txt");
+            try
+            {
+                f2.Demand();
+            }
+            catch (SecurityException s)
+            {
+                Console.WriteLine(s.Message);
+            }
             DirectoryInfo di = new DirectoryInfo(@"k:\");
             Console.WriteLine("No search pattern returns:");
-            FileInfo[] s = di.GetFiles();
-            foreach (var fi in di.GetFiles("AllDrawFFSF.asd"))
+            //FileInfo[] sss = di.GetFiles();
+            //foreach (var fi in di.GetFiles("AllDrawFFSF.asd"))
+            foreach (var fi in di.GetFiles())
             {
                 Console.WriteLine(fi.Name);
             }
